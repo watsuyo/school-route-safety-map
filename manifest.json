@@ -1,6 +1,6 @@
 {
-  "short_name": "Geolonia PWA",
-  "name": "Geolonia PWA",
+  "short_name": "通学路安全マップ",
+  "name": "通学路安全マップ",
   "icons": [
     {
       "src": "manifest-icon-192.maskable.png",
@@ -27,7 +27,7 @@
       "purpose": "maskable"
     },
     {
-      "src": "favicon.ico",
+      "src": "logo.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }
