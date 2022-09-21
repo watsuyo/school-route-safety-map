@@ -6,6 +6,8 @@ import { useSearchParams } from "react-router-dom";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { askGeolocationPermission } from '../geolocation'
 import * as turf from "@turf/turf"
+import Select from 'react-select'
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   data: Pwamap.ShopData[];
@@ -42,17 +44,35 @@ const sortShopList = async (shopList: Pwamap.ShopData[]) => {
 }
 
 const Content = (props: Props) => {
+  const navigate = useNavigate();
 
   const [shop, setShop] = React.useState<Pwamap.ShopData | undefined>()
   const [data, setData] = React.useState<Pwamap.ShopData[]>(props.data)
   const [list, setList] = React.useState<any[]>([]);
   const [page, setPage] = React.useState(10);
   const [hasMore, setHasMore] = React.useState(true);
+  const [categoryList, setCategoryList] = React.useState<string[]>([]);
+
 
   const [searchParams] = useSearchParams();
   const queryCategory = searchParams.get('category')
 
   React.useEffect(() => {
+
+    let categories: string[] = []
+
+    for (let i = 0;i < props.data.length;i++) {
+      const shop = props.data[i]
+
+      if (categories.indexOf(shop['カテゴリ']) === -1) {
+
+        categories.push(shop['カテゴリ'])
+      }
+
+    }
+
+    setCategoryList(categories)
+
 
     let data = props.data;
 
@@ -128,8 +148,26 @@ const Content = (props: Props) => {
 
   return (
     <div id="shop-list" className="shop-list">
-      {queryCategory && <div className="shop-list-category">{`カテゴリ：「${queryCategory}」`}</div>}
-
+      <div className="category-item">
+        <div className="category-container">
+          <label htmlFor="category-select">カテゴリから選ぶ</label>
+          <Select
+            onChange={(e) => {
+              if (e) {
+                navigate(`/list?category=${e.value}`)
+              }
+            }}
+            options={
+              categoryList.map(category => {
+                return {
+                  value: category,
+                  label: category
+                }
+              })
+            }
+          />
+        </div>
+      </div>
       <InfiniteScroll
         dataLength={list.length}
         next={loadMore}
@@ -139,12 +177,10 @@ const Content = (props: Props) => {
       >
         {
           list.map((item, index) => {
-
             return (<div key={index} className="shop">
               <ShopListItem
                 data={item}
                 popupHandler={popupHandler}
-                queryCategory={queryCategory}
               />
             </div>)
 
