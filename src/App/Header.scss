@@ -1,0 +1,31 @@
+.head {
+  background-color: var(--primary-color);
+  box-sizing: border-box;
+  height: 44px;
+
+  p {
+    padding: 10px;
+    color: #ffffff;
+  }
+
+  button {
+    position: relative;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+    color: #ffffff;
+    height: 44px;
+    padding-left: 18px;
+    font-size: 1rem;
+
+    svg {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+    }
+  }
+}
