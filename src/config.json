@@ -1,9 +1,9 @@
 {
-  "title": "Geolonia PWAマップ",
-  "description": "Google スプレッドシートを更新するだけでオリジナルの地図アプリを作成できる\n「Geolonia PWAマップ」",
+  "title": "通学路安全マップ",
+  "description": "通学路安全マップ の説明",
   "form_url": "",
-  "logo_image_url": "https://geoloniamaps.github.io/pwamap/icon-pwamap.svg",
-  "background_image_url": "https://geoloniamaps.github.io/pwamap/geolonia_bgimage_1920_1080.png",
+  "logo_image_url": "https://watsuyo.github.io/school-route-safety-map/public/logo.png",
+  "background_image_url": "https://watsuyo.github.io/school-route-safety-map/public/logo.png",
   "primary_color": "#d2691e",
   "orderby": "distance"
 }
