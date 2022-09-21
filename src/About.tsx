@@ -1,4 +1,3 @@
-import React from "react";
 import './About.scss'
 import Qrcode from './Qrcode'
 import config from './config.json'
@@ -13,7 +12,8 @@ const Content = () => {
         <img className="image" src={logoUrl} alt=""/>
       </div>
 
-      <div className="description">{config.description}</div>
+      <div className="title">{config.title}</div>
+      <div className="description">スマホで確認ができます 👇</div>
       <div className="qrcode"><Qrcode url={window.location.href} /></div>
     </div>
   );
