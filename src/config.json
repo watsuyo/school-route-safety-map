@@ -2,8 +2,7 @@
   "title": "通学路安全マップ",
   "description": "通学路安全マップ の説明",
   "form_url": "",
-  "logo_image_url": "https://watsuyo.github.io/school-route-safety-map/public/logo.png",
-  "background_image_url": "https://watsuyo.github.io/school-route-safety-map/public/logo.png",
-  "primary_color": "#d2691e",
+  "logo_image_url": "https://raw.githubusercontent.com/watsuyo/school-route-safety-map/master/public/logo.jpg",
+  "primary_color": "#f5b041",
   "orderby": "distance"
 }
