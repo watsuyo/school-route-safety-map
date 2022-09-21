@@ -4,9 +4,6 @@ import "./App.scss";
 
 import Home from './App/Home'
 import List from './App/List'
-import AboutUs from './App/AboutUs'
-import Images from './App/Images'
-
 import Tabbar from './App/Tabbar'
 import table2json from "./lib/table2json";
 
@@ -78,7 +75,6 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home data={shopList} />} />
           <Route path="/list" element={<List data={shopList} />} />
-          <Route path="/about" element={<AboutUs />} />
         </Routes>
       </div>
       <div className="app-footer">

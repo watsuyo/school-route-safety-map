@@ -1,7 +1,6 @@
 import React from "react";
 import './About.scss'
 import Qrcode from './Qrcode'
-import Share from './App/Share'
 import config from './config.json'
 
 const Content = () => {
@@ -15,8 +14,7 @@ const Content = () => {
       </div>
 
       <div className="description">{config.description}</div>
-      <div className="qrcode"><Qrcode url={window.location.href}/></div>
-      <Share />
+      <div className="qrcode"><Qrcode url={window.location.href} /></div>
     </div>
   );
 };
