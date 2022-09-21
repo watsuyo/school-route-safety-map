@@ -4,6 +4,7 @@ import geojsonExtent from '@mapbox/geojson-extent'
 import toGeoJson from './toGeoJson'
 import setCluster from './setCluster'
 import Shop from './Shop'
+import Header from './Header'
 
 type Props = {
   data: Pwamap.ShopData[];
@@ -252,6 +253,8 @@ const Content = (props: Props) => {
 
   return (
     <div style={CSS}>
+      <Header />
+
       <div
         ref={mapNode}
         style={CSS}

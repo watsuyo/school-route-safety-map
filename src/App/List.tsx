@@ -8,6 +8,7 @@ import { askGeolocationPermission } from '../geolocation'
 import * as turf from "@turf/turf"
 import Select from 'react-select'
 import { useNavigate } from 'react-router-dom';
+import Header from './Header'
 
 type Props = {
   data: Pwamap.ShopData[];
@@ -148,6 +149,7 @@ const Content = (props: Props) => {
 
   return (
     <div id="shop-list" className="shop-list">
+      <Header />
       <div className="category-item">
         <div className="category-container">
           <label htmlFor="category-select">カテゴリから選ぶ</label>

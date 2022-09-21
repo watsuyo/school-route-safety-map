@@ -51,38 +51,6 @@
     }
   }
 
-  .head
-  {
-    padding: 0 16px;
-    background-color: var(--primary-color);;
-    box-sizing: border-box;
-    height: 44px;
-    text-align: right;
-
-    button
-    {
-      position: relative;
-      background-color: transparent;
-      margin: 0;
-      padding: 0;
-      border: none;
-      color: #ffffff;
-      height: 44px;
-      padding-left: 18px;
-      font-size: 1rem;
-
-      svg
-      {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        -webkit-transform: translateY(-50%);
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);
-      }
-    }
-  }
-
   .category, .distance
   {
     border-radius: 4px;
@@ -109,4 +77,15 @@
     }
   }
 
+}
+
+.back {
+  button {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+    color: black;
+    height: 44px;
+  }
 }

@@ -1,9 +1,9 @@
 import React from "react";
 import Links from './Links'
 import './Shop.scss'
-import { AiOutlineClose } from 'react-icons/ai'
 import { Link } from "react-router-dom";
 import { makeDistanceLabelText } from "./distance-label";
+import Header from "./Header";
 
 type Props = {
   shop: Pwamap.ShopData;
@@ -60,10 +60,9 @@ const Content = (props: Props) => {
 
   return (
     <div className="shop-single">
-      <div className="head">
-        <button onClick={clickHandler}><AiOutlineClose size="16px" color="#FFFFFF" /> 閉じる</button>
-      </div>
+      <Header />
       <div className="container">
+        <div className="back"><button onClick={clickHandler}>{'< 戻る'}</button></div>
         {shop?
           <>
             <h2>{shop['スポット名']}</h2>
@@ -89,9 +88,6 @@ const Content = (props: Props) => {
               data-lng={shop['経度']}
               data-navigation-control="off"
             ></div>
-
-            <p><a className="small" href={`http://maps.apple.com/?q=${shop['緯度']},${shop['経度']}`}>スポットまでの道順</a></p>
-
           </>
           :
           <></>
