@@ -18,7 +18,6 @@
     "chalk": "^5.0.1",
     "icon-gen": "^3.0.0",
     "next-qrcode": "^2.0.0",
-    "pwa-asset-generator": "^6.0.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
@@ -33,7 +32,6 @@
   "scripts": {
     "start": "node bin/config.js http://localhost:3000/ && react-scripts start",
     "build": "node bin/config.js $npm_config_repository && react-scripts build",
-    "build:assets": "pwa-asset-generator public/logo.svg ./public/ --index ./public/index.html --manifest ./public/manifest.json --favicon true",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
