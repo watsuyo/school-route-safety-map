@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import { Routes, Route } from "react-router-dom";
 import "./App.scss";
 
@@ -6,10 +6,7 @@ import Home from './App/Home'
 import List from './App/List'
 import Tabbar from './App/Tabbar'
 import table2json from "./lib/table2json";
-
-// You can see config.json after running `npm start` or `npm run build`
-// import config from './config.json'
-
+import Post from './App/Post'
 
 const sortShopList = async (shopList: Pwamap.ShopData[]) => {
 
@@ -74,6 +71,7 @@ const App = () => {
       <div className="app-body">
         <Routes>
           <Route path="/" element={<Home data={shopList} />} />
+          <Route path="/post" element={<Post />} />
           <Route path="/list" element={<List data={shopList} />} />
         </Routes>
       </div>

@@ -1,0 +1,67 @@
+h1 {
+  margin-bottom: 16px
+}
+
+.form-input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.submit {
+  background-color: #4CAF50;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.label {
+  margin-bottom: 5px;
+}
+
+.result {
+  font-size: 36px;
+}
+
+.result-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.container {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 16px 16px 120px;
+  overflow: scroll;
+  /* IE, Edge 対応 */
+  -ms-overflow-style: none;
+  /* Firefox 対応 */
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.form-flex {
+  display: flex;
+}
+
+.form-hyphen {
+  margin: 0 8px;
+}
+
+.form-input-textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 100px;
+}
+
+.form-container {
+  margin-bottom: 12px;
+}
