@@ -61,18 +61,24 @@ const Content = (props: Props) => {
   return (
     <div className="shop-single">
       <Header />
-      <div className="container">
+      <div className="shop-container">
         <div className="back"><button onClick={clickHandler}>{'< 戻る'}</button></div>
         {shop?
           <>
             <h2>{shop['スポット名']}</h2>
-            <div>
+
+            <div style={{ margin: "0 0 12px 0" }}>
               <span className="nowrap">
                 <Link to={`/list?category=${category}`}>
                   <span onClick={clickHandler} className="category">{category}</span>
                 </Link>
               </span>
               <span className="nowrap">{distanceTipText && <span className="distance">現在位置から {distanceTipText}</span> }</span>
+            </div>
+
+            <div style={{ display: 'flex' }}>
+              <img src="/heart-outline.png" alt="" width='28px' />
+              <p style={{ margin: '2px' }}>143</p>
             </div>
 
             <div style={{margin: "24px 0"}}><Links data={shop} /></div>
