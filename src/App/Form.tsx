@@ -11,6 +11,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import dayjs from 'dayjs'
 import CircularIndeterminate from './CircularIndeterminate'
 import { useNavigate } from "react-router-dom";
+import './Form.scss'
 
 type Input = {
   title: string
@@ -84,7 +85,7 @@ const Content = () => {
     <>
       <Header />
 
-      <div className='container'>
+      <div className='form-container'>
         <Typography variant="h5" gutterBottom margin="normal">
           要望を投稿
         </Typography>
@@ -117,9 +118,7 @@ const Content = () => {
             <MenuItem value="道幅">道幅</MenuItem>
             <MenuItem value="歩道">歩道</MenuItem>
             <MenuItem value="横断歩道">横断歩道</MenuItem>
-            <MenuItem value="立哨・見守り">立哨・見守り</MenuItem>
-            <MenuItem value="歩道">歩道</MenuItem>
-            <MenuItem value="歩道">歩道</MenuItem>
+              <MenuItem value="立哨・見守り">立哨・見守り</MenuItem>
             <MenuItem value="カーブミラー">カーブミラー</MenuItem>
             <MenuItem value="信号機">信号機</MenuItem>
             <MenuItem value="見通し">見通し</MenuItem>
@@ -137,7 +136,7 @@ const Content = () => {
           />
         </FormControl>
 
-        <Button variant="contained" onClick={handleSubmit} disabled={isLoading}>
+        <Button variant="contained" onClick={handleSubmit} disabled={isLoading} fullWidth sx={{ margin: '24px 0' }}>
           投稿
         </Button>
 

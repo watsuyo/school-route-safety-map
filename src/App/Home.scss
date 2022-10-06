@@ -22,11 +22,11 @@
 }
 
 .map-pin-button {
-  position: fixed;
+  position: absolute;
   width: 48px;
   height: 48px;
-  left: 5%;
-  bottom: 10%;
+  left: 10%;
+    bottom: 5%;
   background: var(--primary-color);
   border-radius: 100%;
   cursor: pointer;

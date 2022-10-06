@@ -36,7 +36,6 @@ const Content = (props: Props) => {
       <Suspense fallback=''>
         {location.search.includes('success') ? <CustomizedSnackbars /> : ''}
       </Suspense>
-
     </div>
   );
 };
