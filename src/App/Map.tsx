@@ -8,6 +8,8 @@ import Header from './Header'
 
 type Props = {
   data: Pwamap.ShopData[];
+  useZLatLngString: [string, React.Dispatch<React.SetStateAction<string>>];
+
 };
 
 const CSS: React.CSSProperties = {
@@ -52,8 +54,7 @@ const Content = (props: Props) => {
   const mapNode = React.useRef<HTMLDivElement>(null);
   const [mapObject, setMapObject] = React.useState<any>()
   const [shop, setShop] = React.useState<Pwamap.ShopData | undefined>(undefined)
-  const [ zLatLngString, setZLatLngString ] = React.useState<string>('');
-
+  const [zLatLngString, setZLatLngString] = props.useZLatLngString
   const addMarkers = (mapObject: any, data: any) => {
 
     if (!mapObject || !data) {
