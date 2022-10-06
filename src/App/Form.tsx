@@ -1,132 +1,135 @@
-import { ChangeEvent, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './Form.scss'
 import axios from "axios"
 import Header from './Header'
+import { postPreview } from '../api'
+import { Button, FormControl, MenuItem, Select, Typography } from '@material-ui/core'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import TextField from '@mui/material/TextField'
+import Stack from '@mui/material/Stack'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import dayjs from 'dayjs'
 
 type Input = {
   title: string
   category: string
-  content: string
-  address: string
-  postcode: string
-  date: string
-  time: string
+  latitude: string
+  longitude: string
+  timestamp: string
+  spot: string
+  introduction: string
 }
 
-type Zipcode = {
-  main: string
-  sub: string
-}
+const zlatlng = window.location.hash.split('/')
+const lat = zlatlng[2]
+const lon = zlatlng[3]
 
 const Content = () => {
-  const [zipcode, setZipcodeMain] = useState<Zipcode>({
-    main: "",
-    sub: ""
-  })
-
   const [inputs, setInputs] = useState<Input>({
     title: '',
-    category: '',
-    content: '',
-    address: '',
-    postcode: '',
-    date: '',
-    time: ''
+    category: '住民要望',
+    latitude: lat,
+    longitude: lon,
+    timestamp: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
+    spot: '',
+    introduction: '',
   })
 
-  const [showResult, setShowResult] = useState(false)
-
-  const updateZipcodeMain = (e: ChangeEvent<HTMLInputElement>) => {
-    setZipcodeMain({ ...zipcode, main: e.target.value })
-  }
-  const updateZipcodeSub = async (e: ChangeEvent<HTMLInputElement>) => {
-    setZipcodeMain({ ...zipcode, sub: e.target.value })
-    if (e.target.value.length === 4 && zipcode.main.length === 3) {
-      try {
-        const res = await axios.get(
-          "https://zipcloud.ibsnet.co.jp/api/search",
-          {
-            params: {
-              zipcode: zipcode.main + e.target.value
-            }
-          }
-        )
-        if (res.data.results) {
-          const result = res.data.results[0]
-          setInputs(values => ({ ...values, 'address': result["address1"] + result["address2"] + result["address3"] }))
-        }
-      } catch {
-        alert("住所の取得に失敗しました。")
-      }
-    }
-  }
 
   const handleChange = (e: any) => {
-    const name = e.target.name
-    const value = e.target.value
-    setInputs(values => ({ ...values, [name]: value }))
+    const name = e.target?.name
+    const value = name ? e.target?.value : dayjs(e).format('YYYY-MM-DDTHH:mm:ss')
+    setInputs(values => ({ ...values, [name || 'timestamp']: value }))
   }
 
   const handleSubmit = async () => {
-    setShowResult(!showResult)
+    postPreview(inputs)
   }
+
+  const [address, setAddress] = useState("")
+
+  useEffect(() => {
+    (async () => {
+      const zlatlng = window.location.hash.split('/')
+      const lat = zlatlng[2]
+      const lon = zlatlng[3]
+      if (lat && lon) {
+        const res = await axios.get(
+          "https://aginfo.cgk.affrc.go.jp/ws/rgeocode.php?json",
+          {
+            params: {
+              lat,
+              lon
+            }
+          }
+        )
+        const { result } = res.data
+        const { prefecture: { pname }, municipality: { mname } } = result
+        const { section } = result.local[0]
+
+        setAddress(pname + mname + section)
+      }
+    })()
+  })
 
   return (
     <>
       <Header />
 
-      {
-        showResult ? <div className='result-container'><h1 className='result'>投稿しました ✅</h1></div> :
-          <div className='container'>
-            <h1>口コミ投稿</h1>
-            <div className='form-container'>
-              <label className='label'>郵便番号</label><br />
-              <div className='form-flex'>
-                <input className="form-input" type="text" onChange={updateZipcodeMain} value={zipcode.main} />
-                <span className='form-hyphen'> - </span>
-                <input className="form-input" type="text" onChange={updateZipcodeSub} value={zipcode.sub} />
-              </div>
-            </div><div className='form-container'>
-              <label className='label'>
-                住所
-              </label><br />
-              <input
-                type="text"
-                name="address"
-                value={inputs.address}
+      <div className='container'>
+        <Typography variant="h5" gutterBottom>
+          要望を投稿
+        </Typography>
+
+        <Typography variant="h6" gutterBottom>
+          {address ? address + ' 付近' : ''}
+        </Typography>
+
+        <FormControl fullWidth>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Stack spacing={3}>
+              <DateTimePicker
+                renderInput={(params) => <TextField {...params} />}
+                label="日時"
+                value={inputs.timestamp}
                 onChange={handleChange}
-                className="form-input" />
-            </div><div className='form-container'>
-              <label className='label'>日付</label><br />
-              <input type="date" name="date" value={inputs.date}
+              />
+            </Stack>
+          </LocalizationProvider>
+
+          <Select
+            label="スポット"
+            name="spot"
+            value={inputs.spot}
                 onChange={handleChange}
-                className="form-input" />
-            </div><div className='form-container'>
-              <label className='label'>時刻</label><br />
-              <input type="time" name="time" value={inputs.time}
+          >
+            <MenuItem value="車両交通量">車両交通量</MenuItem>
+            <MenuItem value="道幅">道幅</MenuItem>
+            <MenuItem value="歩道">歩道</MenuItem>
+            <MenuItem value="横断歩道">横断歩道</MenuItem>
+            <MenuItem value="立哨・見守り">立哨・見守り</MenuItem>
+            <MenuItem value="歩道">歩道</MenuItem>
+            <MenuItem value="歩道">歩道</MenuItem>
+            <MenuItem value="カーブミラー">カーブミラー</MenuItem>
+            <MenuItem value="信号機">信号機</MenuItem>
+            <MenuItem value="見通し">見通し</MenuItem>
+          </Select>
+
+          <TextField
+            label="内容"
+            name="introduction"
+            multiline
+            rows={4}
+            value={inputs.introduction}
                 onChange={handleChange}
-                className="form-input" />
-            </div><div className='form-container'>
-              <label className='label'>
-                カテゴリ
-              </label><br />
-              <input
-                type="text"
-                name="category"
-                value={inputs.category}
-                onChange={handleChange}
-                className="form-input" />
-            </div><div className='form-container'>
-              <label className='label'>
-                内容
-              </label><br />
-              <textarea
-                name="content"
-                value={inputs.content}
-                onChange={handleChange}
-                className="form-input-textarea" />
-            </div><button className='submit' onClick={handleSubmit}>送信</button>
-          </div>}
+          />
+        </FormControl>
+
+        <Button variant="contained" onClick={handleSubmit}>
+          投稿
+        </Button>
+      </div>
     </>
   )
 }
