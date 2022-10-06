@@ -154,8 +154,6 @@ const Content = (props: Props) => {
       })
 
       setCluster(mapObject)
-
-
     });
 
   }
@@ -260,8 +258,8 @@ const Content = (props: Props) => {
         ref={mapNode}
         style={CSS}
         data-geolocate-control="on"
-        data-marker="off"
-        data-gesture-handling="off"
+        data-marker="on"
+        data-gesture-handling="on"
       ></div>
       {shop ?
         <Shop shop={shop} close={closeHandler} />

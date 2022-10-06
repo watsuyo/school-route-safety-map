@@ -1,4 +1,5 @@
 import axios from "axios"
+import { NavigateFunction } from "react-router-dom"
 
 const CLIENT_ID = '430416577043-vaudgfur0pdk5qqc1bmrfchuuf5cgkcv.apps.googleusercontent.com'
 const CLIENT_SECRET = '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'
@@ -26,11 +27,10 @@ const getAccessToken = async () => {
   return accessToken
 }
 
-
 /**
  * @return string
  */
-export const postPreview = async (parameters: any) => {
+export const postPreview = async (parameters: any, navigate: NavigateFunction) => {
   try {
     // アクセストークンを取得する
     const accessToken = await getAccessToken()
@@ -45,12 +45,12 @@ export const postPreview = async (parameters: any) => {
     }
     // リクエスト
     const instance = await axios.create({ headers })
-    const response = await instance.post(url, payload)
-    if (response.status !== 200 || !response.data || response.data.error) {
-      throw new Error('Failed to run google apps script.')
+    const response = await instance.post(url, payload) as any
+    if (response.data.response['@type'].includes('error')) {
+      throw new Error()
+    } else {
+      navigate('/?success')
     }
-    const { result } = response.data.response
-    alert(result)
   } catch (e) {
     console.error(e)
     throw e

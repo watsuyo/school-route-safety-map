@@ -1,14 +1,19 @@
 import Map from "./Map"
 import './Home.scss'
-import { Link } from "react-router-dom"
-import React from "react"
+import { Link, useLocation } from "react-router-dom"
+import React, { lazy, Suspense } from "react"
 import { Tooltip } from "@material-ui/core"
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+const CustomizedSnackbars = lazy(() => sleep(1000).then(() => import('./Snackbars')));
 
 type Props = {
   data: Pwamap.ShopData[];
 }
 
 const Content = (props: Props) => {
+  const location = useLocation();
   const useZLatLngString = React.useState<string>('')
   const [showPin, setShowPin] = React.useState<boolean>(false)
   return (
@@ -28,6 +33,10 @@ const Content = (props: Props) => {
       <button className="map-pin-button" onClick={() => setShowPin(!showPin)}>
         <img className="map-pin-button__plus-math" src={`/${showPin ? 'multiply' : 'plus-math'}.png`} alt="plus math" />
       </button>
+      <Suspense fallback=''>
+        {location.search.includes('success') ? <CustomizedSnackbars /> : ''}
+      </Suspense>
+
     </div>
   );
 };

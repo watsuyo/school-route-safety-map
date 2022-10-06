@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
-import './Form.scss'
 import axios from "axios"
 import Header from './Header'
 import { postPreview } from '../api'
-import { Button, FormControl, MenuItem, Select, Typography } from '@material-ui/core'
+import { Button, FormControl, InputLabel, MenuItem, Select, Typography } from '@material-ui/core'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import dayjs from 'dayjs'
+import CircularIndeterminate from './CircularIndeterminate'
+import { useNavigate } from "react-router-dom";
 
 type Input = {
   title: string
@@ -36,15 +37,20 @@ const Content = () => {
     introduction: '',
   })
 
-
   const handleChange = (e: any) => {
     const name = e.target?.name
     const value = name ? e.target?.value : dayjs(e).format('YYYY-MM-DDTHH:mm:ss')
     setInputs(values => ({ ...values, [name || 'timestamp']: value }))
   }
 
+  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate();
+
   const handleSubmit = async () => {
-    postPreview(inputs)
+    setIsLoading(true)
+    await postPreview(inputs, navigate)
+    setIsLoading(false)
+
   }
 
   const [address, setAddress] = useState("")
@@ -73,22 +79,23 @@ const Content = () => {
     })()
   })
 
+
   return (
     <>
       <Header />
 
       <div className='container'>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h5" gutterBottom margin="normal">
           要望を投稿
         </Typography>
 
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
           {address ? address + ' 付近' : ''}
         </Typography>
 
         <FormControl fullWidth>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Stack spacing={3}>
+            <Stack spacing={3} sx={{ mb: 2 }}>
               <DateTimePicker
                 renderInput={(params) => <TextField {...params} />}
                 label="日時"
@@ -98,11 +105,13 @@ const Content = () => {
             </Stack>
           </LocalizationProvider>
 
-          <Select
-            label="スポット"
+          <FormControl fullWidth>
+            <InputLabel>スポット</InputLabel>
+            <Select
             name="spot"
             value={inputs.spot}
-                onChange={handleChange}
+              onChange={handleChange}
+              sx={{ mb: 2 }}
           >
             <MenuItem value="車両交通量">車両交通量</MenuItem>
             <MenuItem value="道幅">道幅</MenuItem>
@@ -114,7 +123,8 @@ const Content = () => {
             <MenuItem value="カーブミラー">カーブミラー</MenuItem>
             <MenuItem value="信号機">信号機</MenuItem>
             <MenuItem value="見通し">見通し</MenuItem>
-          </Select>
+            </Select>
+          </FormControl>
 
           <TextField
             label="内容"
@@ -122,13 +132,16 @@ const Content = () => {
             multiline
             rows={4}
             value={inputs.introduction}
-                onChange={handleChange}
+            onChange={handleChange}
+            sx={{ mb: 2 }}
           />
         </FormControl>
 
-        <Button variant="contained" onClick={handleSubmit}>
+        <Button variant="contained" onClick={handleSubmit} disabled={isLoading}>
           投稿
         </Button>
+
+        {isLoading && <CircularIndeterminate />}
       </div>
     </>
   )
