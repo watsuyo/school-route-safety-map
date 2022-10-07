@@ -244,7 +244,7 @@ const Content = (props: Props) => {
       window.removeEventListener('orientationchange', orienteationchangeHandler)
       map.off('load', onMapLoad)
     }
-  }, [mapNode, mapObject, props.data])
+  })
 
   const closeHandler = () => {
     setShop(undefined)
