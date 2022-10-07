@@ -77,7 +77,7 @@ const Content = (props: Props) => {
             </div>
 
             <div style={{ display: 'flex' }}>
-              <img src="/heart-outline.png" alt="" width='28px' />
+              <img src="heart-outline.png" alt="" width='28px' />
               <p style={{ margin: '2px' }}>143</p>
             </div>
 

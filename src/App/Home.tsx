@@ -31,7 +31,7 @@ const Content = (props: Props) => {
       </Link>
       <Map data={props.data} useZLatLngString={useZLatLngString} />
       <button className="map-pin-button" onClick={() => setShowPin(!showPin)}>
-        <img className="map-pin-button__plus-math" src={`/${showPin ? 'multiply' : 'plus-math'}.png`} alt="plus math" />
+        <img className="map-pin-button__plus-math" src={`${showPin ? 'multiply' : 'plus-math'}.png`} alt="plus math" />
       </button>
       <Suspense fallback=''>
         {location.search.includes('success') ? <CustomizedSnackbars /> : ''}
