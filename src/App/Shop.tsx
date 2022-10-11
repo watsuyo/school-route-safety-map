@@ -1,9 +1,10 @@
-import React from "react";
-import Links from './Links'
+import { useState, useEffect, useRef } from "react"
 import './Shop.scss'
 import { Link } from "react-router-dom";
 import { makeDistanceLabelText } from "./distance-label";
 import Header from "./Header";
+import { postLike, postUnlike } from "../api"
+import { CircularProgress } from "@mui/material"
 
 type Props = {
   shop: Pwamap.ShopData;
@@ -11,8 +12,12 @@ type Props = {
 }
 
 const Content = (props: Props) => {
-  const mapNode = React.useRef<HTMLDivElement>(null);
-  const [map, setMap] = React.useState<any>(null)
+  const mapNode = useRef<HTMLDivElement>(null)
+  const [map, setMap] = useState<any>(null)
+  const [total, setTotal] = useState<number>(0)
+  const [isLiked, setIsLiked] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
   const { shop } = props
 
   const clickHandler = () => {
@@ -23,7 +28,7 @@ const Content = (props: Props) => {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!mapNode.current) {
       return
     }
@@ -36,6 +41,8 @@ const Content = (props: Props) => {
       style: `geolonia/gsi`,
     });
     setMap(nextMap)
+
+    setIsLiked(!!localStorage.getItem(`like:${shop['index']}`))
   }, [shop, mapNode])
 
   const distanceTipText = makeDistanceLabelText(shop.distance)
@@ -58,6 +65,24 @@ const Content = (props: Props) => {
     })
   }
 
+  const onPostLike = async () => {
+    setIsLoading(true)
+    const res = await postLike({ index: shop['index'] })
+    setTotal(res)
+    localStorage.setItem(`like:${shop['index']}`, 'true')
+    setIsLiked(true)
+    setIsLoading(false)
+  }
+
+  const onPostUnlike = async () => {
+    setIsLoading(true)
+    const res = await postUnlike({ index: shop['index'] })
+    setTotal(res)
+    localStorage.removeItem(`like:${shop['index']}`)
+    setIsLiked(false)
+    setIsLoading(false)
+  }
+
   return (
     <div className="shop-single">
       <Header />
@@ -77,13 +102,9 @@ const Content = (props: Props) => {
             </div>
 
             <div style={{ display: 'flex' }}>
-              <img src="heart-outline.png" alt="" width='28px' />
-              <p style={{ margin: '2px' }}>143</p>
+              {isLoading ? <CircularProgress /> : <img src={isLiked ? 'thumb-up.png' : 'thumb-up-outline.png'} alt="いいね" width='28px' className="like-button" onClick={isLiked ? onPostUnlike : onPostLike} />}
+              <p style={{ margin: '2px' }}>{total || shop['いいね数']}</p>
             </div>
-
-            <div style={{margin: "24px 0"}}><Links data={shop} /></div>
-
-            { shop['画像'] && <img src={shop['画像']} alt={shop['スポット名']} style={{width: "100%"}} />}
 
             <p style={{margin: "24px 0", wordBreak: "break-all"}}>{toBreakLine(content)}</p>
 

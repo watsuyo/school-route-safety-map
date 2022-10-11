@@ -1,12 +1,12 @@
-import React from "react"
+import { useState, useEffect } from "react"
 import { Routes, Route } from "react-router-dom";
 import "./App.scss";
 
 import Home from './App/Home'
 import List from './App/List'
 import Tabbar from './App/Tabbar'
-import table2json from "./lib/table2json";
 import Post from './App/Post'
+import { getSafetyData } from "./api"
 
 const sortShopList = async (shopList: Pwamap.ShopData[]) => {
 
@@ -18,9 +18,10 @@ const sortShopList = async (shopList: Pwamap.ShopData[]) => {
 }
 
 const App = () => {
-  const [shopList, setShopList] = React.useState<Pwamap.ShopData[]>([])
+  const [shopList, setShopList] = useState<Pwamap.ShopData[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetch(`${process.env.PUBLIC_URL}/data.json?timestamp=${new Date().getTime()}`)
       .then((response) => {
         return response.ok ? response.text() : Promise.reject(response.status);
@@ -35,50 +36,62 @@ const App = () => {
           return
         }
 
-        let features = table2json(data.values);
+        (async () => {
+          const res = await getSafetyData()
+          const features = JSON.parse(res)
 
-        const nextShopList: Pwamap.ShopData[] = []
-        for (let i = 0; i < features.length; i++) {
-          const feature = features[i] as Pwamap.ShopData
+          setIsLoading(false)
 
-          if (!feature['緯度'] || !feature['経度'] || !feature['スポット名']) {
-            continue;
+          if (features.length) {
+            const nextShopList: Pwamap.ShopData[] = []
+            for (let i = 0;i < features.length;i++) {
+              const feature = features[i] as Pwamap.ShopData
+              if (!feature['緯度'] || !feature['経度'] || !feature['スポット名']) {
+                continue
+              }
+
+              const pattern = /^-?[0-9]+(\.[0-9]+)?$/
+
+              if (!pattern.test(feature['緯度'])) {
+                console.log('緯度が不正です')
+                continue
+              }
+              if (!pattern.test(feature['経度'])) {
+                console.log('経度が不正です')
+                continue
+              }
+
+              const shop = {
+                ...feature,
+                index: i
+              }
+
+              nextShopList.push(shop)
+
+              sortShopList(nextShopList).then((sortedShopList) => {
+                setShopList(sortedShopList)
+              })
+            }
           }
-          if (!feature['緯度'].match(/^-?[0-9]+(\.[0-9]+)?$/)) {
-            continue
-          }
-          if (!feature['経度'].match(/^-?[0-9]+(\.[0-9]+)?$/)) {
-            continue
-          }
-
-          const shop = {
-            ...feature,
-            index: i
-          }
-
-          nextShopList.push(shop)
-        }
-
-        sortShopList(nextShopList).then((sortedShopList) => {
-          setShopList(sortedShopList)
-        })
-
+        })()
       });
   }, [])
 
   return (
-    <div className="app">
-      <div className="app-body">
-        <Routes>
-          <Route path="/" element={<Home data={shopList} />} />
-          <Route path="/post" element={<Post />} />
-          <Route path="/list" element={<List data={shopList} />} />
-        </Routes>
-      </div>
-      <div className="app-footer">
-        <Tabbar />
-      </div>
-    </div>
+    <>
+      {!isLoading ? <div className="app">
+        <div className="app-body">
+          <Routes>
+            <Route path="/" element={<Home data={shopList} />} />
+            <Route path="/post" element={<Post />} />
+            <Route path="/list" element={<List data={shopList} />} />
+          </Routes>
+        </div>
+        <div className="app-footer">
+          <Tabbar />
+        </div>
+      </div> : ''}
+    </>
   );
 }
 

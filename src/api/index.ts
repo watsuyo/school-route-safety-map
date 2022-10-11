@@ -4,8 +4,17 @@ import { NavigateFunction } from "react-router-dom"
 const CLIENT_ID = '430416577043-vaudgfur0pdk5qqc1bmrfchuuf5cgkcv.apps.googleusercontent.com'
 const CLIENT_SECRET = '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'
 const REFRESH_TOKEN = '1//0ejQEdwBJDx_uCgYIARAAGA4SNwF-L9Irw8w44X-7S4kYaW84_Ra2ae7t8f0KdwmOsVUB9QjOCpJZWxaPaIp7bsfkio69JR0ebFA'
-const SCRIPT_ID = 'AKfycbwSwQqMJSMjA3GT7mcr7celmHDXy4QV8pasL45mQsMvfIMjeYIHqNdLS87pCiv5nQuN'
+const SCRIPT_ID = 'AKfycbwnv-EH1C95J6wSjfRpV28c3D-WE80NR2KVD-edX7zJauR0AYVZN95wXZfNxOsopZWq'
 const TOKEN_URL = 'https://oauth2.googleapis.com/token'
+
+const URL = `https://script.googleapis.com/v1/scripts/${SCRIPT_ID}:run`
+
+const getHeaders = async () => {
+  const accessToken = await getAccessToken()
+  return {
+    Authorization: `Bearer ${accessToken}`,
+  }
+}
 
 /**
  * アクセストークンを取得する関数
@@ -32,24 +41,76 @@ const getAccessToken = async () => {
  */
 export const postPreview = async (parameters: any, navigate: NavigateFunction) => {
   try {
-    // アクセストークンを取得する
-    const accessToken = await getAccessToken()
-    // GASを実行
-    const url = `https://script.googleapis.com/v1/scripts/${SCRIPT_ID}:run`
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-    }
     const payload = {
-      function: 'doGet',
+      function: 'postUserPost',
       parameters,
     }
-    // リクエスト
+    const headers = await getHeaders()
     const instance = await axios.create({ headers })
-    const response = await instance.post(url, payload) as any
+    const response = await instance.post(URL, payload) as any
     if (response.data.response['@type'].includes('error')) {
       throw new Error()
     } else {
       navigate('/?success')
+    }
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+export const getSafetyData = async () => {
+  try {
+    const payload = {
+      function: 'getSafetyData',
+    }
+    const headers = await getHeaders()
+    const instance = await axios.create({ headers })
+    const response = await instance.post(URL, payload) as any
+    if (response.data.response['@type'].includes('error')) {
+      throw new Error()
+    } else {
+      return response.data.response.result
+    }
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+export const postLike = async (parameters: any) => {
+  try {
+    const payload = {
+      function: 'postLike',
+      parameters,
+    }
+    const headers = await getHeaders()
+    const instance = await axios.create({ headers })
+    const response = await instance.post(URL, payload) as any
+    if (response.data.response['@type'].includes('error')) {
+      throw new Error()
+    } else {
+      return response.data.response.result
+    }
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+export const postUnlike = async (parameters: any) => {
+  try {
+    const payload = {
+      function: 'postUnlike',
+      parameters,
+    }
+    const headers = await getHeaders()
+    const instance = await axios.create({ headers })
+    const response = await instance.post(URL, payload) as any
+    if (response.data.response['@type'].includes('error')) {
+      throw new Error()
+    } else {
+      return response.data.response.result
     }
   } catch (e) {
     console.error(e)

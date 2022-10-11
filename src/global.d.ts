@@ -8,11 +8,7 @@ declare namespace Pwamap {
     'スポット名': string;
     'カテゴリ': string;
     '紹介文': string;
-    '画像': string;
-    'URL': string;
-    'Instagram': string;
-    'Twitter': string;
-    '公式サイト': string
+    'いいね数': number;
   }
 
   type LngLat = [number, number]

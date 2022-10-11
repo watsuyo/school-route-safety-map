@@ -51,7 +51,6 @@ const Content = () => {
     setIsLoading(true)
     await postPreview(inputs, navigate)
     setIsLoading(false)
-
   }
 
   const [address, setAddress] = useState("")

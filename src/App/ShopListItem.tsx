@@ -15,7 +15,6 @@ const Content = (props: Props) => {
 
   const distanceTipText = makeDistanceLabelText(props.data.distance)
   const category = props.data['カテゴリ']
-  const image = props.data['画像']
 
 
   return (
@@ -34,8 +33,6 @@ const Content = (props: Props) => {
         </div>
 
         <div style={{ margin: "10px 10px 10px 0" }}>
-
-          { image && <img src={image} alt={props.data['スポット名']} onClick={clickHandler}/>}
 
         </div>
 
