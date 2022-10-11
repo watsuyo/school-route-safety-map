@@ -8,12 +8,6 @@ on:
     branches:
       - 'master'
 
-  workflow_dispatch:
-
-  schedule:
-    - cron:  '*/60 * * * *'
-    # 60分ごとに実行
-
 jobs:
   ubuntu:
     runs-on: ubuntu-latest
@@ -27,21 +21,6 @@ jobs:
         node-version: 16.x
 
     - run: npm install
-
-    - name: Download data and set up environment variables
-      run: |
-        node bin/download.js ${GOOGLE_SHEET_URL} ${GOOGLE_SHEET_API_KEY}
-
-    - name: Push the data to Github
-      run: |
-        git config --global user.name "${GITHUB_ACTOR}"
-        git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-        if (git diff --shortstat | grep '[0-9]'); then \
-          git add .; \
-          git status .; \
-          git commit -m "スプレッドシートのデータを更新"; \
-          git push -f origin master; \
-        fi
 
     - run: npm run build -repository=${GITHUB_REPOSITORY}
 
