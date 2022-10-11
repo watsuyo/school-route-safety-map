@@ -101,10 +101,10 @@ const Content = (props: Props) => {
               <span className="nowrap">{distanceTipText && <span className="distance">現在位置から {distanceTipText}</span> }</span>
             </div>
 
-            <div style={{ display: 'flex' }}>
+            {shop['いいね数'] === 0 || shop['いいね数'] > 0 ? <div style={{ display: 'flex' }}>
               {isLoading ? <CircularProgress /> : <img src={isLiked ? 'thumb-up.png' : 'thumb-up-outline.png'} alt="いいね" width='28px' className="like-button" onClick={isLiked ? onPostUnlike : onPostLike} />}
               <p style={{ margin: '2px' }}>{total || shop['いいね数']}</p>
-            </div>
+            </div> : <></>}
 
             <p style={{margin: "24px 0", wordBreak: "break-all"}}>{toBreakLine(content)}</p>
 
