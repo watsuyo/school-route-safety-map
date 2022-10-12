@@ -34,8 +34,7 @@ export default function CustomizedSnackbars() {
           onClose={handleClose}
           severity="success"
         >
-          投稿完了しました。<br />
-          担当が確認後反映されます。
+          投稿完了しました。
         </Alert>
       </Snackbar>
     </Stack >
