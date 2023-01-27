@@ -4,7 +4,8 @@ import InputBase from '@mui/material/InputBase'
 import IconButton from '@mui/material/IconButton'
 import { FaSearch } from 'react-icons/fa'
 import { LoadScript } from '@react-google-maps/api'
-const API_KEY = 'AIzaSyCSy4kD_a3hae88KcIsYhVaXqY4Yn3P-sI'
+
+const GOOGLE_MAP_API_KEY = process.env.REACT_APP_GOOGLE_MAP_API_KEY || ''
 
 type Props = {
   geocode: () => void
@@ -19,7 +20,6 @@ export default function CustomizedInputBase(props: Props) {
     }
     props.setPlace(event.target.value)
   }
-
   return (
     <Paper
       component="form"
@@ -36,7 +36,7 @@ export default function CustomizedInputBase(props: Props) {
         onKeyPress={(event) => changeLocationName(event)}
         style={{ height: '60px' }}
       />
-      <LoadScript googleMapsApiKey={API_KEY}>
+      <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY}>
       </LoadScript>
 
     </Paper>
