@@ -5,11 +5,12 @@ import toGeoJson from './toGeoJson'
 import setCluster from './setCluster'
 import Shop from './Shop'
 import Header from './Header'
+import MapSearch from "./MapSearch"
+import { useState } from 'react'
 
 type Props = {
   data: Pwamap.ShopData[];
-  useZLatLngString: [string, React.Dispatch<React.SetStateAction<string>>];
-
+  useZLatLngString: [string, React.Dispatch<React.SetStateAction<string>>]
 };
 
 const CSS: React.CSSProperties = {
@@ -173,36 +174,63 @@ const Content = (props: Props) => {
 
   }, [ zLatLngString ]);
 
+  const hash = parseHash()
+  const latLngString = hash.get('map') || ''
+  const zlatlng = latLngString.split('/')
+  const [inputLat, setLat] = useState(zlatlng[1])
+  const [inputLng, setLng] = useState(zlatlng[2])
+  const [place, setPlace] = useState()
+
+  // @ts-ignore
+  const { geolonia } = window
+
+  const geojson = toGeoJson(props.data)
+  const bounds = geojsonExtent(geojson)
+
+  const geocode = () => {
+    const geocoder = new window.google.maps.Geocoder()
+    geocoder.geocode({ address: place }, (results, status) => {
+      if (status === 'OK' && results) {
+        const lat = results[0].geometry.location.lat().toString()
+        const lng = results[0].geometry.location.lng().toString()
+
+        setLat(lat)
+        setLng(lng)
+
+        const map = new geolonia.Map({
+          container: mapNode.current,
+          style: 'geolonia/gsi',
+          bounds: bounds,
+          fitBoundsOptions: { padding: 50 },
+        });
+
+        map.flyTo({ center: [lng, lat], zoom: 17 })
+      }
+    })
+  }
+
   React.useEffect(() => {
     // Only once reder the map.
     if (!mapNode.current || mapObject) {
       return
     }
 
-    // @ts-ignore
-    const { geolonia } = window;
-
-    const geojson = toGeoJson(props.data)
-    const bounds = geojsonExtent(geojson)
-
     const map = new geolonia.Map({
       container: mapNode.current,
       style: 'geolonia/gsi',
       bounds: bounds,
       fitBoundsOptions: { padding: 50 },
-    });
+    })
 
-    const hash = parseHash();
+    const hash = parseHash()
     if (hash && hash.get('map')) {
-
-      const latLngString = hash.get('map') || '';
-      const zlatlng = latLngString.split('/');
-
+      const latLngString = hash.get('map') || ''
+      const zlatlng = latLngString.split('/')
       const zoom = zlatlng[0]
       const lat = zlatlng[1]
       const lng = zlatlng[2]
 
-      map.flyTo({center: [lng, lat], zoom});
+      map.flyTo({ center: [lng, lat], zoom });
 
     } else if (bounds) {
 
@@ -254,12 +282,15 @@ const Content = (props: Props) => {
     <div style={CSS}>
       <Header />
 
+      <MapSearch geocode={geocode} setPlace={setPlace} />
+
       <div
         ref={mapNode}
         style={CSS}
+        data-lat={inputLat}
+        data-lng={inputLng}
         data-geolocate-control="on"
-        data-marker="on"
-        data-gesture-handling="on"
+        data-marker="off"
       ></div>
       {shop ?
         <Shop shop={shop} close={closeHandler} />
