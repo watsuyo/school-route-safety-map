@@ -194,6 +194,13 @@ const Content = (props: Props) => {
         const lat = results[0].geometry.location.lat().toString()
         const lng = results[0].geometry.location.lng().toString()
 
+        if (!results[0].address_components.some((component: any) => {
+          return component.long_name === '杉並区' || component.long_name === 'Suginami City'
+        })) {
+          alert('対象エリアは、杉並区内のみとなります。')
+          return
+        }
+
         setLat(lat)
         setLng(lng)
 
@@ -205,6 +212,8 @@ const Content = (props: Props) => {
         });
 
         map.flyTo({ center: [lng, lat], zoom: 16 })
+      } else {
+        alert('結果が見つかりませんでした。\n対象エリアは、杉並区内のみとなります')
       }
     })
   }
