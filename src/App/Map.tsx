@@ -204,7 +204,7 @@ const Content = (props: Props) => {
           fitBoundsOptions: { padding: 50 },
         });
 
-        map.flyTo({ center: [lng, lat], zoom: 17 })
+        map.flyTo({ center: [lng, lat], zoom: 16 })
       }
     })
   }

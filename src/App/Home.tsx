@@ -15,7 +15,7 @@ type Props = {
 const Content = (props: Props) => {
   const location = useLocation();
   const useZLatLngString = React.useState<string>('')
-  const [showPin, setShowPin] = React.useState<boolean>(false)
+  const [showPin] = React.useState<boolean>(false)
   return (
     <div className="home-container">
       <Link to={`/post?${useZLatLngString['0']}`}>
