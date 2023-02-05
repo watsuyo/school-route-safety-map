@@ -1,20 +1,36 @@
-import datetime
-from ast import Dict
 import codecs
 import csv
+import datetime
 import json
 import os
 import urllib.request
+from ast import Dict
 
-year = 2019
+today = datetime.date.today()
 
-REMOTE_SOURCES = [
-    {
-        'url': 'https://www.npa.go.jp/publications/statistics/koutsuu/opendata/' + str(year) + '/honhyo_' + str(year) + '.csv',
-        'jsonname': 'honhyo_' + str(year) + '.json',
-    },
-]
+yearListKotsu = range(2019, today.year)
 
+
+def genSourceKotsu(year):
+    return {
+        'url': 'https://www.npa.go.jp/publications/statistics/koutsuu/opendata/' +
+        str(year) + '/honhyo_' + str(year) + '.csv',
+        'jsonname': 'honhyo_' + str(year) + '.json'
+    }
+
+
+listSuginami = range(201, 204)
+
+
+def genSourceSuginami(line):
+    return {'url': 'https://www2.wagmap.jp/suginami/suginami/OpenDatafile/map_33/CSV/opendata_' +
+            str(line) + '.csv', 'jsonname': 'suginami_' + str(line) + '.json'}
+
+
+REMOTE_SOURCES = list(map(genSourceKotsu, yearListKotsu)) + \
+    list(map(genSourceSuginami, listSuginami))
+
+print(REMOTE_SOURCES)
 
 JST = datetime.timezone(datetime.timedelta(hours=+9), 'JST')
 
@@ -43,29 +59,29 @@ os.makedirs('./data', exist_ok=True)
 
 
 def decode_csv(csv_data):
-    print('csv decoding')
     for codec in CODECS:
         try:
             csv_str = csv_data.decode(codec)
-            print('ok:' + codec)
             return csv_str
         except BaseException:
-            print('ng:' + codec)
             continue
-    print('Appropriate codec is not found.')
 
 
 def csvstr_to_dicts(csvstr):
     datas = []
     rows = [row for row in csv.reader(csvstr.splitlines())]
     header = rows[0]
-
     maindatas = rows[1:]
+
     for d in maindatas:
         if d == []:
             continue
-        if not (d[0] == '1' and d[1] == '30'):
-            continue
+        if not (d[0] == '1' and d[1] ==
+                '30'):
+
+            if not d[0] == '区立小学校' and not d[0] == '区立中学校' and not d[0] == '区立特別支援学校' and not d[
+                    0] == '区立小中一貫教育校' and not d[3] == '通学路' and not d[3] == '小学校':
+                continue
         data = {}
         for i in range(len(header)):
             data[header[i]] = d[i]
@@ -74,27 +90,36 @@ def csvstr_to_dicts(csvstr):
 
 
 def import_csv_from(csvurl):
-    request_file = urllib.request.urlopen(csvurl)
-    if not request_file.getcode() == 200:
-        return
-
-    f = decode_csv(request_file.read())
-    datas = csvstr_to_dicts(f)
-    timestamp = (request_file.getheader('Last-Modified'))
-    return {'data': datas, 'last_update': timestamp}
+    try:
+        request_file = urllib.request.urlopen(csvurl)
+        f = decode_csv(request_file.read())
+        datas = csvstr_to_dicts(f)
+        timestamp = (request_file.getheader('Last-Modified'))
+        return {'data': datas, 'last_update': timestamp}
+    except BaseException:
+        pass
 
 
 def dumps_json(file_name: str, json_data: Dict):
     with codecs.open('./public/' + file_name, "w", "utf-8") as f:
-        f.write(
-            json.dumps(
-                json_data,
-                ensure_ascii=False,
-                indent=4,
-                separators=(
-                    ',',
-                    ': ')))
+        try:
+            f.write(
+                json.dumps(
+                    json_data,
+                    ensure_ascii=False,
+                    indent=4,
+                    separators=(
+                        ',',
+                        ': ')))
+            print('Saved: ' + file_name)
+        except BaseException as e:
+            print('Failed: ' + file_name)
+            print(e)
+            pass
+
 
 for remotes in REMOTE_SOURCES:
     data = import_csv_from(remotes['url'])
+    if not data:
+        continue
     dumps_json(remotes['jsonname'], data)
