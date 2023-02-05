@@ -101,7 +101,7 @@ def import_csv_from(csvurl):
 
 
 def dumps_json(file_name: str, json_data: Dict):
-    with codecs.open('./public/' + file_name, "w", "utf-8") as f:
+    with codecs.open('./src/lib/' + file_name, "w", "utf-8") as f:
         try:
             f.write(
                 json.dumps(
