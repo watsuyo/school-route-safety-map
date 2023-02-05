@@ -1,4 +1,4 @@
-name: CI
+name: Update JSON
 
 on:
   schedule:
@@ -9,15 +9,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@latest
-      - name: Set current datetime as env variable
+      - uses: actions/checkout@v3
+      - name: Get current date and time
         env:
-          TZ: 'Asia/Tokyo'
-        run: echo "CURRENT_DATETIME=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+          TZ: "Asia/Tokyo" # タイムゾーンを指定
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d-%H-%M')"
       - name: git checkout
         run: |
-          git checkout -b ${{'update-json-'}}${{ CURRENT_DATETIME }}
-      - uses: actions/setup-python@latest
+          git checkout -b ${{'update-json-'}}${{ steps.date.outputs.date }}
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
       - name: Install dependencies
@@ -33,10 +34,10 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "Update JSON" -a
-          git push origin ${{'update-json-'}}${{ CURRENT_DATETIME }}
+          git push origin ${{'update-json-'}}${{ steps.date.outputs.date }}
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@latest
+        uses: peter-evans/create-pull-request@v4
         with:
-          title: ${{'Update JSON - '}}${{ CURRENT_DATETIME }}
-          branch: ${{'update-json-'}}${{ CURRENT_DATETIME }}
-          base: main
+          title: ${{'Update JSON - '}}${{ steps.date.outputs.date }}
+          branch: ${{'update-json-'}}${{ steps.date.outputs.date }}
+          base: master
