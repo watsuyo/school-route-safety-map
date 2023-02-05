@@ -9,11 +9,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@latest
+      - name: Set current datetime as env variable
+        env:
+          TZ: 'Asia/Tokyo'
+        run: echo "CURRENT_DATETIME=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
       - name: git checkout
         run: |
-          git checkout -b feature/test
-      - uses: actions/setup-python@v4
+          git checkout -b ${{'update-json-'}}${{ CURRENT_DATETIME }}
+      - uses: actions/setup-python@latest
         with:
           python-version: '3.10'
       - name: Install dependencies
@@ -28,5 +32,11 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "Add json" -a
-          git push -f origin feature/test
+          git commit -m "Update JSON" -a
+          git push origin ${{'update-json-'}}${{ CURRENT_DATETIME }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@latest
+        with:
+          title: ${{'Update JSON - '}}${{ CURRENT_DATETIME }}
+          branch: ${{'update-json-'}}${{ CURRENT_DATETIME }}
+          base: main
