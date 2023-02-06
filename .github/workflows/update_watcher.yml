@@ -1,9 +1,9 @@
 name: Update JSON
 
-on: push
-  # schedule:
-  #   # 日本時間17時00分に定期実行
-  #   - cron: "0 8 * * *"
+on:
+  schedule:
+    # 日本時間17時00分に定期実行
+    - cron: "0 8 * * *"
 
 jobs:
   update-json:
