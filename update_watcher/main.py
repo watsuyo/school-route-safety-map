@@ -77,15 +77,34 @@ def csvstr_to_dicts(csvstr):
         if d == []:
             continue
         if not (d[0] == '1' and d[1] ==
-                '30'):
+                '30' and d[10] == '115'):
 
             if not d[0] == '区立小学校' and not d[0] == '区立中学校' and not d[0] == '区立特別支援学校' and not d[
                     0] == '区立小中一貫教育校' and not d[3] == '通学路' and not d[3] == '小学校':
                 continue
         data = {}
         for i in range(len(header)):
+            if d[i] == '地点　緯度（北緯）':
+                lat = 424857124
+                lat = lat / 1000
+                lat_degree = int(str(lat)[:2])
+                lat_minute = int(str(lat)[2:4])
+                lat_second = float(str(lat)[4:])
+                data[header[i]] = lat_degree + \
+                    (lat_minute / 60) + (lat_second / 60 / 60)
+                continue
+            if d[i] == '地点　経度（東経）':
+                lng = 1413708842
+                lng = lng / 1000
+                lng_degree = int(str(lng)[:3])
+                lng_minute = int(str(lng)[3:5])
+                lng_second = float(str(lng)[5:])
+                data[header[i]] = lng_degree + \
+                    (lng_minute / 60) + (lng_second / 60 / 60)
+                continue
             data[header[i]] = d[i]
         datas.append(data)
+
     return datas
 
 
