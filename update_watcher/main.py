@@ -77,7 +77,7 @@ def csvstr_to_dicts(csvstr):
         if d == []:
             continue
         if not (d[0] == '1' and d[1] ==
-                '30'):
+                '30' and d[10] == '115'):
 
             if not d[0] == '区立小学校' and not d[0] == '区立中学校' and not d[0] == '区立特別支援学校' and not d[
                     0] == '区立小中一貫教育校' and not d[3] == '通学路' and not d[3] == '小学校':
@@ -86,6 +86,8 @@ def csvstr_to_dicts(csvstr):
         for i in range(len(header)):
             data[header[i]] = d[i]
         datas.append(data)
+        print(len(datas))
+
     return datas
 
 
