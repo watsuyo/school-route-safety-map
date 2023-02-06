@@ -54,17 +54,17 @@ const App = () => {
             }
           })
 
-          const zoneFeatures = schoolZoneList.data.map((school) => {
-            return {
-              'スポット名': '通学路',
-              '緯度': school['緯度'],
-              '経度': school['経度'],
-              'タイムスタンプ': '',
-              'カテゴリ': '',
-              '紹介文': '',
-              'いいね数': 0,
-            }
-          })
+          // const zoneFeatures = schoolZoneList.data.map((school) => {
+          //   return {
+          //     'スポット名': '通学路',
+          //     '緯度': school['緯度'],
+          //     '経度': school['経度'],
+          //     'タイムスタンプ': '',
+          //     'カテゴリ': '',
+          //     '紹介文': '',
+          //     'いいね数': 0,
+          //   }
+          // })
 
           const honhyoListFeatures = honhyo2019List.data.concat(honhyo2020List.data).concat(honhyo2021List.data).filter((item) => {
             const timestamp = new Date(item['発生日時　　年'] + '/' + item['発生日時　　月'] + '/' + item['発生日時　　日'] + ' ' + item['発生日時　　時'] + ':' + item['発生日時　　分'])
@@ -110,12 +110,14 @@ const App = () => {
             }
           })
 
+          const allFeatures = schoolListFeatures.concat(honhyoListFeatures)
+
 
           setIsLoading(false)
-          if (honhyoListFeatures.length) {
+          if (allFeatures.length) {
             const nextShopList: Pwamap.ShopData[] = []
-            for (let i = 0;i < honhyoListFeatures.length;i++) {
-              const feature = honhyoListFeatures[i]
+            for (let i = 0;i < allFeatures.length;i++) {
+              const feature = allFeatures[i]
               if (!feature['緯度'] || !feature['経度'] || !feature['スポット名']) {
                 continue
               }
