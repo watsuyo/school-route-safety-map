@@ -6,19 +6,53 @@ import Home from './App/Home'
 import List from './App/List'
 import Tabbar from './App/Tabbar'
 import Post from './App/Post'
-// import { getSafetyData } from "./api"
-import schoolList from './lib/suginami_202.json'
-import schoolZoneList from './lib/suginami_201.json'
 import honhyo2019List from './lib/honhyo_2019.json'
 import honhyo2020List from './lib/honhyo_2020.json'
 import honhyo2021List from './lib/honhyo_2021.json'
 
+const weather = (item: string) => {
+  switch (item) {
+    case '1':
+      return '晴'
+    case '2':
+      return '曇'
+    case '3':
+      return '雨'
+    case '4':
+      return '雪'
+    default:
+      return ''
+  }
+}
+
+const trafficLight = (item: string) => {
+  switch (item) {
+    case '1':
+      return '点灯'
+    case '8':
+      return '点灯'
+    case '2':
+      return '点灯'
+    case '3':
+      return '点滅'
+    case '4':
+      return '点滅'
+    case '5':
+      return '消灯'
+    case '6':
+      return '故障'
+    default:
+      return '設置なし'
+  }
+}
+
+
 const sortShopList = async (shopList: Pwamap.ShopData[]) => {
 
   // 新着順にソート
-  return shopList.sort(function (item1, item2) {
+  return shopList.sort(function(item1, item2) {
     return Date.parse(item2['タイムスタンプ']) - Date.parse(item1['タイムスタンプ'])
-  });
+  })
 
 }
 
@@ -29,7 +63,7 @@ const App = () => {
   useEffect(() => {
     fetch(`${process.env.PUBLIC_URL}/data.json?timestamp=${new Date().getTime()}`)
       .then((response) => {
-        return response.ok ? response.text() : Promise.reject(response.status);
+        return response.ok ? response.text() : Promise.reject(response.status)
       })
       .then((fetchedData) => {
 
@@ -42,29 +76,6 @@ const App = () => {
         }
 
         (async () => {
-          const schoolListFeatures = schoolList.data.map((school) => {
-            return {
-              'スポット名': school["\uFEFF\"\u540D\u524D\""],
-              '緯度': school['緯度'],
-              '経度': school['経度'],
-              'タイムスタンプ': '',
-              'カテゴリ': '',
-              '紹介文': '',
-              'いいね数': 0,
-            }
-          })
-
-          // const zoneFeatures = schoolZoneList.data.map((school) => {
-          //   return {
-          //     'スポット名': '通学路',
-          //     '緯度': school['緯度'],
-          //     '経度': school['経度'],
-          //     'タイムスタンプ': '',
-          //     'カテゴリ': '',
-          //     '紹介文': '',
-          //     'いいね数': 0,
-          //   }
-          // })
 
           const honhyoListFeatures = honhyo2019List.data.concat(honhyo2020List.data).concat(honhyo2021List.data).filter((item) => {
             const timestamp = new Date(item['発生日時　　年'] + '/' + item['発生日時　　月'] + '/' + item['発生日時　　日'] + ' ' + item['発生日時　　時'] + ':' + item['発生日時　　分'])
@@ -100,24 +111,22 @@ const App = () => {
               return item['発生日時　　年'] + '/' + item['発生日時　　月'] + '/' + item['発生日時　　日'] + ' ' + item['発生日時　　時'] + ':' + item['発生日時　　分']
             }
             return {
-              'スポット名': '交通事故',
+              'スポット名': timestamp() + ': 交通事故',
               '緯度': lat(),
               '経度': lng(),
               'タイムスタンプ': timestamp(),
-              'カテゴリ': '交通事故',
+              'カテゴリ': '信号機: ' + trafficLight(item['信号機']),
               '紹介文': '',
               'いいね数': 0,
             }
           })
 
-          const allFeatures = schoolListFeatures.concat(honhyoListFeatures)
-
 
           setIsLoading(false)
-          if (allFeatures.length) {
+          if (honhyoListFeatures.length) {
             const nextShopList: Pwamap.ShopData[] = []
-            for (let i = 0;i < allFeatures.length;i++) {
-              const feature = allFeatures[i]
+            for (let i = 0;i < honhyoListFeatures.length;i++) {
+              const feature = honhyoListFeatures[i]
               if (!feature['緯度'] || !feature['経度'] || !feature['スポット名']) {
                 continue
               }
