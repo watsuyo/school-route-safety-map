@@ -46,7 +46,7 @@ const Content = (props: Props) => {
   }, [shop, mapNode])
 
   const distanceTipText = makeDistanceLabelText(shop.distance)
-  const category = shop['カテゴリ']
+  const categoryList = shop['カテゴリリスト']
   const content = shop['紹介文']
 
   const toBreakLine = (text: string) => {
@@ -93,11 +93,23 @@ const Content = (props: Props) => {
             <h2>{shop['スポット名']}</h2>
 
             <div style={{ margin: "0 0 12px 0" }}>
-              <span className="nowrap">
+              {/* <span className="nowrap">
                 <Link to={`/list?category=${category}`}>
                   <span onClick={clickHandler} className="category">{category}</span>
                 </Link>
-              </span>
+              </span> */}
+              {
+                // @ts-ignore
+                JSON.parse([categoryList]).map((category, i) => {
+                  return (
+                    <span key={i} className="nowrap">
+                      <Link to={`/list?category=${category}`}>
+                        <span onClick={clickHandler} className="category">{category}</span>
+                      </Link>
+                    </span>
+                  )
+                })
+              }
               <span className="nowrap">{distanceTipText && <span className="distance">現在位置から {distanceTipText}</span> }</span>
             </div>
 

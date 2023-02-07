@@ -14,7 +14,7 @@ const Content = (props: Props) => {
   }
 
   const distanceTipText = makeDistanceLabelText(props.data.distance)
-  const category = props.data['カテゴリ']
+  const categoryList = props.data['カテゴリリスト']
 
 
   return (
@@ -23,11 +23,17 @@ const Content = (props: Props) => {
         <h2 className="shop-title" style={{ wordBreak: "break-all" }} onClick={clickHandler}>{props.data['スポット名']}</h2>
         <div className='tag-box'>
 
-          <span className="nowrap">
-            <Link to={`/list?category=${category}`}>
-              <span className="category">{category}</span>
-            </Link>
-          </span>
+          {
+            categoryList.map((category, i) => {
+              return (
+                <span className="nowrap" key={i}>
+                  <Link to={`/list?category=${category}`}>
+                    <span className="category">{category}</span>
+                  </Link>
+                </span>
+              )
+            })
+          }
           <span className="nowrap">{distanceTipText && <span className="distance">現在位置から {distanceTipText}</span>}</span>
         </div>
 

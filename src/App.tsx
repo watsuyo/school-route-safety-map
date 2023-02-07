@@ -46,6 +46,15 @@ const trafficLight = (item: string) => {
   }
 }
 
+const municipality = (item: string) => {
+  switch (item) {
+    case '115':
+      return '杉並区'
+    default:
+      return ''
+  }
+}
+
 
 const sortShopList = async (shopList: Pwamap.ShopData[]) => {
 
@@ -115,7 +124,7 @@ const App = () => {
               '緯度': lat(),
               '経度': lng(),
               'タイムスタンプ': timestamp(),
-              'カテゴリ': '信号機: ' + trafficLight(item['信号機']),
+              'カテゴリリスト': [municipality(item['市区町村コード']), '信号機: ' + trafficLight(item['信号機']), '天気: ' + weather(item['天候'])],
               '紹介文': '',
               'いいね数': 0,
             }

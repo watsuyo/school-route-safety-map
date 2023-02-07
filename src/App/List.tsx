@@ -64,12 +64,13 @@ const Content = (props: Props) => {
 
     for (let i = 0;i < props.data.length;i++) {
       const shop = props.data[i]
-
-      if (categories.indexOf(shop['カテゴリ']) === -1) {
-
-        categories.push(shop['カテゴリ'])
+      const categoryList = shop['カテゴリリスト']
+      for (let j = 0;j < categoryList.length;j++) {
+        const category = categoryList[j]
+        if (!categories.includes(category)) {
+          categories.push(category)
+        }
       }
-
     }
 
     setCategoryList(categories)
@@ -79,7 +80,7 @@ const Content = (props: Props) => {
 
     if (queryCategory) {
       data = props.data.filter((shop) => {
-        return shop['カテゴリ'] === queryCategory
+        return categories && categories.includes(queryCategory)
       })
     }
 
@@ -152,7 +153,7 @@ const Content = (props: Props) => {
       <Header />
       <div className="category-item">
         <div className="category-container">
-          <label htmlFor="category-select">カテゴリから選ぶ</label>
+          <label htmlFor="category-select">カテゴリリストから選ぶ</label>
           <Select
             onChange={(e) => {
               if (e) {
