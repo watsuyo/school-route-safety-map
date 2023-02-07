@@ -30,7 +30,7 @@ export default function CustomizedInputBase(props: Props) {
       </IconButton>
       <InputBase
         sx={{ ml: 1, flex: 1 }}
-        placeholder="住所で検索"
+        placeholder="住所や小学校名で検索"
         inputProps={{ 'aria-label': '住所で検索' }}
         onChange={(event) => changeLocationName(event)}
         onKeyPress={(event) => changeLocationName(event)}
