@@ -90,14 +90,9 @@ const Content = (props: Props) => {
         <div className="back"><button onClick={clickHandler}>{'< 戻る'}</button></div>
         {shop?
           <>
-            <h2>{shop['スポット名']}</h2>
+            <h2>交通事故詳細</h2>
 
             <div style={{ margin: "0 0 12px 0" }}>
-              {/* <span className="nowrap">
-                <Link to={`/list?category=${category}`}>
-                  <span onClick={clickHandler} className="category">{category}</span>
-                </Link>
-              </span> */}
               {
                 // @ts-ignore
                 JSON.parse([categoryList]).map((category, i) => {

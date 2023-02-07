@@ -7,6 +7,9 @@ import Shop from './Shop'
 import Header from './Header'
 import MapSearch from "./MapSearch"
 import { useState } from 'react'
+// import schoolList from '../lib/suginami_202.json'
+// import { Chip } from "@material-ui/core"
+// import './Map.scss'
 
 type Props = {
   data: Pwamap.ShopData[];
@@ -18,6 +21,14 @@ const CSS: React.CSSProperties = {
   height: '100%',
   position: 'relative',
 }
+
+
+// const schoolListFeatures = schoolList.data.map((school) => {
+//   return {
+//     name: school["\uFEFF\"\u540D\u524D\""]
+//   }
+// })
+
 
 const hidePoiLayers = (map: any) => {
 
@@ -292,6 +303,16 @@ const Content = (props: Props) => {
       <Header />
 
       <MapSearch geocode={geocode} setPlace={setPlace} />
+
+      {/* <div className="chip-wrapper">
+        {
+          schoolListFeatures.map((school) => {
+            return (
+              <Chip label={school.name} />
+            )
+          })
+        }
+      </div> */}
 
       <div
         ref={mapNode}
