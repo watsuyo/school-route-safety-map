@@ -63,6 +63,11 @@
     "sass": "^1.49.9",
     "yaml": "^1.10.2"
   },
+  "pwa": {
+    "workboxOptions": {
+      "maximumFileSizeToCacheInBytes": 10485760
+    }
+  },
   "volta": {
     "node": "16.17.1"
   }
