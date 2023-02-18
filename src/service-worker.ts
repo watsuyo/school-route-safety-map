@@ -1,3 +1,4 @@
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 /// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 
@@ -58,6 +59,7 @@ registerRoute(
 // precache, in this case same-origin .png requests like those from in public/
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.
+  // @ts-ignore
   ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.png'),
   // Customize this strategy as needed, e.g., by changing to CacheFirst.
   new StaleWhileRevalidate({
@@ -70,26 +72,29 @@ registerRoute(
   })
 );
 
-// ./static/js/main.8b98dcbd.chunk.js is 9.33 MB, and won't be precached. Configure maximumFileSizeToCacheInBytes to change this limit.の解決
-// https://qiita.com/ryuichi1208/items/0c9b0b0f9b0b0f9b0b0f
+// maxFileSizeToCacheInBytes を設定する
 registerRoute(
-  ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.js'),
+  // @ts-ignore
+  ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.png'),
   new StaleWhileRevalidate({
-    cacheName: 'js',
+    cacheName: 'images',
     plugins: [
-      // Ensure that once this runtime cache reaches a maximum size the
-      // least-recently used images are removed.
-      new ExpirationPlugin({
-        maxEntries: 50
+      new ExpirationPlugin({ maxEntries: 50 }),
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+        // @ts-ignore
+        maxFileSizeToCacheInBytes: 10 * 1024 * 1024,
       }),
     ],
   })
-)
+);
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
+// @ts-ignore
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
+    // @ts-ignore
     self.skipWaiting();
   }
 });
