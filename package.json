@@ -60,7 +60,11 @@
     "axios": "^0.26.1",
     "dayjs": "^1.11.5",
     "node-fetch": "2",
-    "sass": "^1.49.9",
+    "workbox-core": "^6.5.4",
+    "workbox-expiration": "^6.5.4",
+    "workbox-precaching": "^6.5.4",
+    "workbox-routing": "^6.5.4",
+    "workbox-strategies": "^6.5.4",
     "yaml": "^1.10.2"
   },
   "pwa": {
