@@ -93,21 +93,3 @@ precacheAndRoute(self.__WB_MANIFEST, {
   // @ts-ignore
   maximumFileSizeToCacheInBytes: 10 * 1024 * 1024
 })
-
-// index.html 以外のファイルについて、StaleWhileRevalidate キャッシュを使う
-registerRoute(
-  ({ url }) => !url.pathname.startsWith('/_'),
-  new StaleWhileRevalidate()
-)
-
-// index.html については NetworkOnly キャッシュを使う
-registerRoute(
-  ({ url }) => url.pathname === '/',
-  new NetworkOnly()
-)
-
-// 静的ファイル（CSS、JS、画像など）については、CacheFirst キャッシュを使う
-registerRoute(
-  ({ url }) => url.pathname.endsWith('.css') || url.pathname.endsWith('.js') || url.pathname.endsWith('.png'),
-  new CacheFirst()
-)
