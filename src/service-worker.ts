@@ -70,6 +70,22 @@ registerRoute(
   })
 );
 
+// ./static/js/main.8b98dcbd.chunk.js is 9.33 MB, and won't be precached. Configure maximumFileSizeToCacheInBytes to change this limit.の解決
+// https://qiita.com/ryuichi1208/items/0c9b0b0f9b0b0f9b0b0f
+registerRoute(
+  ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.js'),
+  new StaleWhileRevalidate({
+    cacheName: 'js',
+    plugins: [
+      // Ensure that once this runtime cache reaches a maximum size the
+      // least-recently used images are removed.
+      new ExpirationPlugin({
+        maxEntries: 50
+      }),
+    ],
+  })
+)
+
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
