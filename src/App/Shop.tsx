@@ -3,8 +3,8 @@ import './Shop.scss'
 import { Link } from "react-router-dom";
 import { makeDistanceLabelText } from "./distance-label";
 import Header from "./Header";
-import { postLike, postUnlike } from "../api"
-import { CircularProgress } from "@mui/material"
+// import { postLike, postUnlike } from "../api"
+// import { CircularProgress } from "@mui/material"
 
 type Props = {
   shop: Pwamap.ShopData;
@@ -14,9 +14,9 @@ type Props = {
 const Content = (props: Props) => {
   const mapNode = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<any>(null)
-  const [total, setTotal] = useState<number>(0)
-  const [isLiked, setIsLiked] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  // const [total, setTotal] = useState<number>(0)
+  // const [isLiked, setIsLiked] = useState(false)
+  // const [isLoading, setIsLoading] = useState(false)
 
   const { shop } = props
 
@@ -42,7 +42,7 @@ const Content = (props: Props) => {
     });
     setMap(nextMap)
 
-    setIsLiked(!!localStorage.getItem(`like:${shop['index']}`))
+    // setIsLiked(!!localStorage.getItem(`like:${shop['index']}`))
   }, [shop, mapNode])
 
   const distanceTipText = makeDistanceLabelText(shop.distance)
@@ -65,23 +65,23 @@ const Content = (props: Props) => {
     })
   }
 
-  const onPostLike = async () => {
-    setIsLoading(true)
-    const res = await postLike({ index: shop['index'] })
-    setTotal(res)
-    localStorage.setItem(`like:${shop['index']}`, 'true')
-    setIsLiked(true)
-    setIsLoading(false)
-  }
+  // const onPostLike = async () => {
+  //   setIsLoading(true)
+  //   const res = await postLike({ index: shop['index'] })
+  //   setTotal(res)
+  //   localStorage.setItem(`like:${shop['index']}`, 'true')
+  //   setIsLiked(true)
+  //   setIsLoading(false)
+  // }
 
-  const onPostUnlike = async () => {
-    setIsLoading(true)
-    const res = await postUnlike({ index: shop['index'] })
-    setTotal(res)
-    localStorage.removeItem(`like:${shop['index']}`)
-    setIsLiked(false)
-    setIsLoading(false)
-  }
+  // const onPostUnlike = async () => {
+  //   setIsLoading(true)
+  //   const res = await postUnlike({ index: shop['index'] })
+  //   setTotal(res)
+  //   localStorage.removeItem(`like:${shop['index']}`)
+  //   setIsLiked(false)
+  //   setIsLoading(false)
+  // }
 
   return (
     <div className="shop-single">

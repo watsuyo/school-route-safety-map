@@ -91,7 +91,7 @@ const App = () => {
             const hours = timestamp.getHours()
             const minutes = timestamp.getMinutes()
 
-            const isWithinMorningRange = (hours == 7 && minutes >= 30) || (hours == 8 && minutes < 30)
+            const isWithinMorningRange = (hours === 7 && minutes >= 30) || (hours === 8 && minutes < 30)
             const isWithinAfternoonRange = (hours >= 14 && hours < 18)
 
             if (isWithinMorningRange || isWithinAfternoonRange) {
