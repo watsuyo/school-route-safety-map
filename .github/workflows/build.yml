@@ -27,9 +27,10 @@ jobs:
     - name: Setup Pages
       uses: actions/configure-pages@v2
     - run: npm ci
-    - run: npm run build
+    - name: build
       env:
         REACT_APP_GOOGLE_MAP_API_KEY: ${{ secrets.REACT_APP_GOOGLE_MAP_API_KEY }}
+      run: npm run build
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@4.1.1
