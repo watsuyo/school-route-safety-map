@@ -14,26 +14,19 @@ jobs:
     env:
       GOOGLE_SHEET_API_KEY: ${{ secrets.GOOGLE_SHEET_API_KEY }}
       GOOGLE_SHEET_URL: ${{ secrets.GOOGLE_SHEET_URL }}
+      REACT_APP_GOOGLE_MAP_API_KEY: ${{ secrets.REACT_APP_GOOGLE_MAP_API_KEY }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
         node-version: 16.x
-
     - run: npm install
-
-    - name: build
-      env:
-        REACT_APP_GOOGLE_MAP_API_KEY: ${{ secrets.REACT_APP_GOOGLE_MAP_API_KEY }}
-      run: npm run build -repository=${GITHUB_REPOSITORY}
+    - run: npm run build -repository=${GITHUB_REPOSITORY}
 
     - name: Setup Pages
       uses: actions/configure-pages@v2
     - run: npm ci
-    - name: build
-      env:
-        REACT_APP_GOOGLE_MAP_API_KEY: ${{ secrets.REACT_APP_GOOGLE_MAP_API_KEY }}
-      run: npm run build
+    - run: npm run build
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@4.1.1
