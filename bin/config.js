@@ -1,5 +1,6 @@
 const fs = require("fs");
-const path = require("path")
+const path = require("path");
+const { env } = require("process");
 const srcConfigFilePath = path.join(process.cwd(), "/src/config.json");
 
 let config;
@@ -13,6 +14,7 @@ try {
     const GITHUB_USERNAME = GITHUB[0]
     const GITHUB_REPOSITORY = GITHUB[1]
     config.homepage_url = `https://${GITHUB_USERNAME}.github.io/${GITHUB_REPOSITORY}/`
+    config.react_app_google_map_api_key = env.REACT_APP_GOOGLE_MAP_API_KEY;
   }
 
   const envText =

@@ -4,8 +4,9 @@ import InputBase from '@mui/material/InputBase'
 import IconButton from '@mui/material/IconButton'
 import { FaSearch } from 'react-icons/fa'
 import { LoadScript } from '@react-google-maps/api'
+import config from '../../src/config.json'
 
-const GOOGLE_MAP_API_KEY = process.env.REACT_APP_GOOGLE_MAP_API_KEY || ''
+const GOOGLE_MAP_API_KEY = config.react_app_google_map_api_key || process.env.REACT_APP_GOOGLE_MAP_API_KEY || ''
 
 type Props = {
   geocode: () => void
