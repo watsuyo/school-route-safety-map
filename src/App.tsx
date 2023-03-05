@@ -120,7 +120,8 @@ const App = () => {
               return item['発生日時　　年'] + '/' + item['発生日時　　月'] + '/' + item['発生日時　　日'] + ' ' + item['発生日時　　時'] + ':' + item['発生日時　　分']
             }
             return {
-              'スポット名': ' ',
+              // eslint-disable-next-line no-useless-concat
+              'スポット名': '交通事故' + ' ' + item['発生日時　　年'] + '/' + item['発生日時　　月'] + '/' + item['発生日時　　日'] + ' ' + item['発生日時　　時'] + ':' + item['発生日時　　分'],
               '緯度': lat(),
               '経度': lng(),
               'タイムスタンプ': timestamp(),
