@@ -7,9 +7,10 @@ import Shop from './Shop'
 import Header from './Header'
 import MapSearch from "./MapSearch"
 import { useState } from 'react'
-// import schoolList from '../lib/suginami_202.json'
-// import { Chip } from "@material-ui/core"
-// import './Map.scss'
+import Alert from '@mui/material/Alert'
+import Link from '@mui/material/Link'
+import { FaExternalLinkAlt } from 'react-icons/fa'
+import './Map.scss'
 
 type Props = {
   data: Pwamap.ShopData[];
@@ -298,9 +299,34 @@ const Content = (props: Props) => {
     setShop(undefined)
   }
 
+  const [showAlert, setShowAlert] = useState(true)
+
+  const closeAlert = () => {
+    setShowAlert(false)
+  }
+
+
   return (
     <div style={CSS}>
       <Header />
+
+      {
+        showAlert ?
+          <div>
+            <Alert severity="info">
+              <div className="alert-container">
+                <div>
+                  <p>杉並区以外のエリアも対応予定です。</p>
+                  <Link target="_blank" href="https://aback-dragonfly-1d3.notion.site/ee75f8b41aa046dc9f5edeb4007a3d9b">サービスに関する情報はこちら<FaExternalLinkAlt /></Link>
+                </div>
+                <a onClick={closeAlert}>
+                  ×
+                </a>
+              </div>
+            </Alert>
+          </div>
+          : ''
+      }
 
       <MapSearch geocode={geocode} setPlace={setPlace} />
 

@@ -6,6 +6,7 @@ import Home from './App/Home'
 import List from './App/List'
 import Tabbar from './App/Tabbar'
 import Post from './App/Post'
+import Request from './App/Request'
 import honhyo2019List from './lib/honhyo_2019.json'
 import honhyo2020List from './lib/honhyo_2020.json'
 import honhyo2021List from './lib/honhyo_2021.json'
@@ -176,6 +177,7 @@ const App = () => {
             <Route path="/" element={<Home data={shopList} />} />
             <Route path="/post" element={<Post />} />
             <Route path="/list" element={<List data={shopList} />} />
+            <Route path="/request" element={<Request />} />
           </Routes>
         </div>
         <div className="app-footer">

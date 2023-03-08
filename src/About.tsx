@@ -14,7 +14,7 @@ const Content = () => {
 
       <div className="title">{config.title}</div>
       <div className="description">スマホで確認ができます 👇</div>
-      <div className="qrcode"><Qrcode url={window.location.href} /></div>
+      <div className="qrcode"><Qrcode url={'https://school-zone-safety-map.site/#/?map=16/35.703734/139.619857'} /></div>
     </div>
   );
 };
