@@ -319,9 +319,9 @@ const Content = (props: Props) => {
                   <p>杉並区以外のエリアも対応予定です。</p>
                   <Link target="_blank" href="https://aback-dragonfly-1d3.notion.site/ee75f8b41aa046dc9f5edeb4007a3d9b">サービスに関する情報はこちら<FaExternalLinkAlt /></Link>
                 </div>
-                <a onClick={closeAlert}>
+                <button className="btn" onClick={closeAlert}>
                   ×
-                </a>
+                </button>
               </div>
             </Alert>
           </div>
