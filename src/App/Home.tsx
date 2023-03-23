@@ -1,8 +1,9 @@
 import Map from "./Map"
 import './Home.scss'
 import { Link, useLocation } from "react-router-dom"
-import React, { lazy, Suspense } from "react"
+import React, { lazy, Suspense, useEffect, useState } from "react"
 import { Tooltip } from "@material-ui/core"
+import axios from "axios"
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -13,15 +14,40 @@ type Props = {
 }
 
 const Content = (props: Props) => {
+  const [isSuginami, setSuginami] = useState(false)
+
+  useEffect(() => {
+    (async () => {
+      const zlatlng = window.location.hash.split('/')
+      const lat = zlatlng[2]
+      const lon = zlatlng[3]
+      if (lat && lon) {
+        const res = await axios.get(
+          "https://aginfo.cgk.affrc.go.jp/ws/rgeocode.php?json",
+          {
+            params: {
+              lat,
+              lon
+            }
+          }
+        )
+        const { result } = res.data
+        const { municipality: { mname } } = result
+
+        setSuginami(mname === '杉並区')
+      }
+    })()
+  })
+
   const location = useLocation();
-  const useZLatLngString = React.useState<string>('')
-  const [showPin] = React.useState<boolean>(false)
+  const useZLatLngString = useState<string>('')
+  const [showPin, setShowPin] = useState<boolean>(false)
   return (
     <div className="home-container">
       <Link to={`/post?${useZLatLngString['0']}`}>
         {showPin ? <Tooltip
           className="center"
-          title="この位置に要望を投稿"
+          title={isSuginami ? 'この位置に要望を投稿' : ''}
           placement="top"
           arrow
           open={true}
@@ -30,10 +56,9 @@ const Content = (props: Props) => {
         </Tooltip> : ''}
       </Link>
       <Map data={props.data} useZLatLngString={useZLatLngString} />
-      {/* マップ上にピンを立てるボタンを非表示 */}
-      {/* <button className="map-pin-button" onClick={() => setShowPin(!showPin)}>
+      <button className="map-pin-button" onClick={() => setShowPin(!showPin)}>
         <img className="map-pin-button__plus-math" src={`${showPin ? 'multiply' : 'plus-math'}.png`} alt="plus math" />
-      </button> */}
+      </button>
       <Suspense fallback=''>
         {location.search.includes('success') ? <CustomizedSnackbars /> : ''}
       </Suspense>
