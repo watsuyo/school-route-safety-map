@@ -47,7 +47,7 @@ const Content = (props: Props) => {
       <Link to={`/post?${useZLatLngString['0']}`}>
         {showPin ? <Tooltip
           className="center"
-          title={isSuginami ? 'この位置に要望を投稿' : ''}
+          title={isSuginami ? 'この位置に報告を投稿' : ''}
           placement="top"
           arrow
           open={true}
