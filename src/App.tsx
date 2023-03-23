@@ -100,6 +100,8 @@ const App = () => {
             } else {
               return false
             }
+          }).filter((item) => {
+            return item['事故類型'] === '21' && (item['年齢（当事者A）'] === '01' || item['年齢（当事者B）'] === '01')
           }).map((item) => {
             const lat = () => {
               const lat = String(Number(item['地点　緯度（北緯）']) / 1000)
