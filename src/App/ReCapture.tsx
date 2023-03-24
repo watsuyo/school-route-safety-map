@@ -1,22 +1,25 @@
-import { useRef } from 'react'
-import GoogleReCaptcha from 'react-google-recaptcha'
+import { Dispatch, SetStateAction, useRef, useState } from 'react'
+import ReCAPTCHA from 'react-google-recaptcha'
 
-export const ReCapture = () => {
-  const recaptchaRef = useRef<GoogleReCaptcha>(null)
+type Props = {
+  useIsHuman: [boolean, Dispatch<SetStateAction<boolean>>]
+}
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault()
-    if (recaptchaRef.current) {
-      const token = await recaptchaRef.current.executeAsync()
-      console.log('Token:', token)
-    }
+export const ReCapture = (props: Props) => {
+  const captchaDemo = useRef<ReCAPTCHA>(null)
+  const [_, setIsHuman] = props.useIsHuman
+
+  const onChange = () => {
+    setIsHuman(true)
   }
 
   return (
-    <GoogleReCaptcha
-      sitekey='p6LeYSyclAAAAAPyz76wPLdKBn1AMdeyDpxMUXeF0'
-      ref={recaptchaRef}
-      onChange={handleSubmit}
-    />
+    <div>
+      <ReCAPTCHA
+        ref={captchaDemo}
+        sitekey="6LdTUCslAAAAAPTi3kxAQKMEpvJYYDwIw3WTntJ3"
+        onChange={onChange}
+      />
+    </div>
   )
 }

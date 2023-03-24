@@ -3,16 +3,13 @@ import axios from "axios"
 import Header from './Header'
 import { postPreview } from '../api'
 import { Button, FormControl, InputLabel, MenuItem, Select, Typography } from '@material-ui/core'
-import { LocalizationProvider } from '@mui/x-date-pickers'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import TextField from '@mui/material/TextField'
-import Stack from '@mui/material/Stack'
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import dayjs from 'dayjs'
 import CircularIndeterminate from './CircularIndeterminate'
 import { useNavigate } from "react-router-dom";
 import './Form.scss'
 import { ReCapture } from './ReCapture'
+import { FormHelperText } from '@mui/material'
 
 type Input = {
   title: string
@@ -49,9 +46,15 @@ const Content = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    setIsLoading(true)
-    await postPreview(inputs, navigate)
-    setIsLoading(false)
+    if (!isHuman || isLoading || !inputs.introduction || !inputs.spot) {
+      setIsEmptySpot(!inputs.spot)
+      setIsEmptyIntroduction(!inputs.introduction)
+      setIsEmptyHuman(!isHuman)
+    } else {
+      setIsLoading(true)
+      await postPreview(inputs, navigate)
+      setIsLoading(false)
+    }
   }
 
   const [address, setAddress] = useState("")
@@ -80,6 +83,11 @@ const Content = () => {
     })()
   })
 
+  const useIsHuman = useState(false)
+  const [isHuman] = useIsHuman
+  const [isEmptyIntroduction, setIsEmptyIntroduction] = useState(false)
+  const [isEmptySpot, setIsEmptySpot] = useState(false)
+  const [isEmptyHuman, setIsEmptyHuman] = useState(false)
 
   return (
     <>
@@ -94,25 +102,17 @@ const Content = () => {
           {address ? address + ' 付近' : ''}
         </Typography>
 
-        <FormControl fullWidth>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Stack spacing={3} sx={{ mb: 2 }}>
-              <DateTimePicker
-                renderInput={(params) => <TextField {...params} />}
-                label="日時"
-                value={inputs.timestamp}
-                onChange={handleChange}
-              />
-            </Stack>
-          </LocalizationProvider>
-
-          <FormControl fullWidth>
+        <FormControl fullWidth required onBlurCapture={() => {
+          setIsEmptySpot(!inputs.spot)
+        }} error={isEmptySpot}
+          sx={
+            { mb: 2 }
+          }>
             <InputLabel>スポット</InputLabel>
             <Select
             name="spot"
             value={inputs.spot}
-              onChange={handleChange}
-              sx={{ mb: 2 }}
+            onChange={handleChange}
           >
             <MenuItem value="車両交通量">車両交通量</MenuItem>
             <MenuItem value="道幅">道幅</MenuItem>
@@ -123,8 +123,14 @@ const Content = () => {
             <MenuItem value="信号機">信号機</MenuItem>
             <MenuItem value="見通し">見通し</MenuItem>
             </Select>
+          <FormHelperText
+            error={isEmptySpot}
+            sx={{ ml: 2 }}
+          >{
+              isEmptySpot ? '入力は必須です' : ''
+            }</FormHelperText>
           </FormControl>
-
+        <FormControl fullWidth required>
           <TextField
             label="内容"
             name="introduction"
@@ -133,12 +139,26 @@ const Content = () => {
             value={inputs.introduction}
             onChange={handleChange}
             sx={{ mb: 2 }}
+            required
+            helperText={
+              isEmptyIntroduction ? '入力は必須です' : ''
+            }
+            error={isEmptyIntroduction}
+            onBlurCapture={() => {
+              setIsEmptyIntroduction(!inputs.introduction)
+            }}
           />
         </FormControl>
 
-        <ReCapture />
+        <FormControl fullWidth required>
+          <ReCapture useIsHuman={useIsHuman} />
+          <FormHelperText
+            error={isEmptyHuman && !isHuman} sx={{ ml: 2 }}>{
+              isEmptyHuman && !isHuman ? 'チェックは必須です' : ''
+            }</FormHelperText>
+        </FormControl>
 
-        <Button variant="contained" onClick={handleSubmit} disabled={isLoading} fullWidth sx={{ margin: '24px 0' }}>
+        <Button variant="contained" onClick={handleSubmit} fullWidth sx={{ margin: '24px 0' }}>
           投稿
         </Button>
 
