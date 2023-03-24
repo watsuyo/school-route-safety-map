@@ -15,7 +15,6 @@ export const ReCapture = () => {
   return (
     <GoogleReCaptcha
       sitekey='p6LeYSyclAAAAAPyz76wPLdKBn1AMdeyDpxMUXeF0'
-      size="invisible"
       ref={recaptchaRef}
       onChange={handleSubmit}
     />
