@@ -12,6 +12,7 @@ import dayjs from 'dayjs'
 import CircularIndeterminate from './CircularIndeterminate'
 import { useNavigate } from "react-router-dom";
 import './Form.scss'
+import { ReCapture } from './ReCapture'
 
 type Input = {
   title: string
@@ -134,6 +135,8 @@ const Content = () => {
             sx={{ mb: 2 }}
           />
         </FormControl>
+
+        <ReCapture />
 
         <Button variant="contained" onClick={handleSubmit} disabled={isLoading} fullWidth sx={{ margin: '24px 0' }}>
           投稿
