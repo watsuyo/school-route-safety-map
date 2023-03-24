@@ -347,6 +347,10 @@ const Content = (props: Props) => {
         data-lng={inputLng}
         data-geolocate-control="on"
         data-marker="off"
+        data-loader="off"
+        data-fullscreen-control="on"
+        data-scale-control="on"
+        data-lazy-loading="off"
       ></div>
       {shop ?
         <Shop shop={shop} close={closeHandler} />

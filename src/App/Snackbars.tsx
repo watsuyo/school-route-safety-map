@@ -2,6 +2,7 @@ import { forwardRef, useState, SyntheticEvent, useEffect } from 'react'
 import Stack from '@mui/material/Stack'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert, { AlertProps } from '@mui/material/Alert'
+import { AlertTitle } from '@material-ui/core'
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -27,14 +28,15 @@ export default function CustomizedSnackbars() {
       <Snackbar
         open={open}
         onClose={handleClose}
-        sx={{ bottom: '250px' }}
-        autoHideDuration={3500}
+        autoHideDuration={7500}
+        sx={{ bottom: { xs: 90, sm: 0 } }}
       >
         <Alert
           onClose={handleClose}
           severity="success"
         >
-          投稿完了しました。
+          <AlertTitle>報告が完了しました。</AlertTitle>
+          運営者の承認後に公開されます。
         </Alert>
       </Snackbar>
     </Stack >
