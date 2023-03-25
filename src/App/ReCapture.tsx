@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useRef } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 
 type Props = {
@@ -7,10 +7,11 @@ type Props = {
 
 export const ReCapture = (props: Props) => {
   const captchaDemo = useRef<ReCAPTCHA>(null)
-  const [_, setIsHuman] = props.useIsHuman
+  const [isHuman, setIsHuman] = props.useIsHuman
 
   const onChange = () => {
     setIsHuman(true)
+    console.log(isHuman)
   }
 
   return (
