@@ -23,18 +23,18 @@ const Content = (props: Props) => {
       const lon = zlatlng[3]
       if (lat && lon) {
         const res = await axios.get(
-          "https://aginfo.cgk.affrc.go.jp/ws/rgeocode.php?json",
+          "https://nominatim.openstreetmap.org/reverse",
           {
             params: {
               lat,
-              lon
+              lon,
+              format: "json",
+              zoom: 18
             }
           }
         )
-        const { result } = res.data
-        const { municipality: { mname } } = result
-
-        setSuginami(mname === '杉並区')
+        const { address: city } = res.data
+        setSuginami(city.city === 'Suginami')
       }
     })()
   })
@@ -47,7 +47,7 @@ const Content = (props: Props) => {
       <Link to={`/post?${useZLatLngString['0']}`}>
         {showPin ? <Tooltip
           className="center"
-          title={isSuginami ? 'この位置に報告を投稿' : ''}
+          title={isSuginami ? 'この位置に危険箇所を投稿' : ''}
           placement="top"
           arrow
           open={true}

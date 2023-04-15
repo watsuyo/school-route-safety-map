@@ -95,7 +95,7 @@ const Content = () => {
 
       <div className='form-container'>
         <Typography variant="h5" gutterBottom margin="normal">
-          報告を投稿
+          危険箇所を投稿
         </Typography>
 
         <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
